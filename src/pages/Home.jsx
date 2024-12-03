@@ -13,7 +13,7 @@ const Home = () => {
             <div className="col-lg-6">
               <h1 style={{fontSize:'80px'}}><i className='fa-brands fa-docker'></i>Project Fair</h1>
               <p style={{textAlign:'justify'}}>One Stop Destination for all Software Development Projects. Where User can add and manage their projects. As well as access all projects available in our website... What are you waiting for!!!</p>
-              <Link to={'/login'} className="btn btn-success">STARTS TO EXPLORE</Link>
+              <Link to={'/login'} className="btn btn-danger">STARTS TO EXPLORE</Link>
             </div>
             <div className="col-lg-6">
               <img className='img-fluid' width={'500px'} src={landingImg} alt="" />

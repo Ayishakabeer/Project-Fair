@@ -1,9 +1,41 @@
-import React from 'react'
+import React, { useState } from 'react'
 import authImg from '../assets/login-img.png'
 import { Form,FloatingLabel } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
+import { registerAPI } from '../service/allAPI'
 
 const Auth = ({insideRegister}) => {
+  const [userInput,setUserInput] = useState({
+    username:"",email:"",password:""
+  })
+  console.log(userInput);
+  
+  const register = async (e)=>{
+    e.preventDefault()
+    if(userInput.username && userInput.password && userInput.email){
+      //api call
+      try{
+        const result = await registerAPI(userInput)
+        if(result.status==200){
+          alert(`Welcome ${result.data?.username},please login to explore our projects!!!!`)
+          navigate("/login")
+          setUserInput({username:"",email:"",password:""})
+        }
+        else{
+          if(result.response.status==406){
+            alert(result.response.data)
+            setUserInput({username:"",email:"",password:""})
+          }
+        }
+      }catch(err){
+        console.log(err);
+      }
+    }
+    else{
+      alert("please fill the form completely!!!")
+    }
+  }
+
   return (
 
     <div style={{minHeight:'100vh' , width:'100%'}} className="d-flex justify-content-center align-items-center">
@@ -24,7 +56,7 @@ const Auth = ({insideRegister}) => {
                     label="Username"
                     className="mb-3"
                   >
-                    <Form.Control type="text" placeholder="UserName" />
+                    <Form.Control value={userInput.username} onChange={e=>setUserInput({...userInput,username:e.target.value})} type="text" placeholder="UserName" />
                   </FloatingLabel>
                 }
                 <FloatingLabel
@@ -32,16 +64,16 @@ const Auth = ({insideRegister}) => {
                     label="Email address"
                     className="mb-3"
                   >
-                    <Form.Control type="email" placeholder="name@example.com" />
+                    <Form.Control value={userInput.email} onChange={e=>setUserInput({...userInput,email:e.target.value})} type="email" placeholder="name@example.com" />
                   </FloatingLabel>
                   
                   <FloatingLabel controlId="floatingPassword" label="Password">
-                    <Form.Control type="password" placeholder="Password" />
+                    <Form.Control value={userInput.password} onChange={e=>setUserInput({...userInput,password:e.target.value})} type="password" placeholder="Password" />
                   </FloatingLabel>
                   {
                     insideRegister ?
                     <div className="mt-3">
-                      <button className='btn btn-primary mb-2'>Register</button>
+                      <button onClick={register} className='btn btn-primary mb-2'>Register</button>
                       <p>Existing User? Please Click here to <Link to={'/login'}>Login</Link></p>
                     </div>
                     :
